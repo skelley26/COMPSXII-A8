@@ -1,0 +1,6 @@
+why row-major traversal outperforms column-major traversal. Your explanation must address:
+
+Row-major traversal outperforms column-major because of memory hierarchies. C stores 2D arrays are store with row-major, so it fetches an entire cache line and assumes that you will probably want the next locations as well. So, it gives you the next 15 instantly with no memory access required.
+When the CPU fetches a cache line during row-major, the pattern is more of a sequence and as said above, it is near instant. [0][0], [0][1], [0][2]....
+When the CPU fetches a cache line during column-major, since the row you are trying to access is in a seperate location, it causes the CPU to stall. So it is much less efficient than row traversal. [0][0], [1][0], [2][0].... 
+The compiler cannot fix this problem through optimization because you set a specific access order. The compiler cannot up and change that order because it has no idea if it is safe to reorder. Since it cannot reorder your memory accesses, it cannot fix your problems.
